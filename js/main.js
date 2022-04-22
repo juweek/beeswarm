@@ -78,7 +78,7 @@ let xLine = svg.append("line")
 
 
 // Load and process data
-d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/testCounties.csv").then(function (data) {
+d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/gray_counties.csv").then(function (data) {
 
     let dataSet = data;
 
