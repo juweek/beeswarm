@@ -19,7 +19,7 @@ var arr = Array.from(svgPaths)
 METHOD: set the size of the canvas
 ------------------------------
 */
-let height = 400;
+let height = 600;
 let width = 1000;
 let margin = ({top: 0, right: 40, bottom: 34, left: 40});
 
@@ -78,7 +78,7 @@ let xLine = svg.append("line")
 
 
 // Load and process data
-d3.csv("https://martinheinz.github.io/charts/data/who_suicide_stats.csv").then(function (data) {
+d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/testCounties.csv").then(function (data) {
 
     let dataSet = data;
 
@@ -157,7 +157,7 @@ d3.csv("https://martinheinz.github.io/charts/data/who_suicide_stats.csv").then(f
             .attr("class", "countries")
             .attr("cx", 0)
             .attr("cy", (height / 2) - margin.bottom / 2)
-            .attr("r", 6)
+            .attr("r", 4)
            // .attr("fill", function(d){return colors(d.Color)})
             .attr("fill", function(d){return d.Color})
             .merge(countriesCircles)
