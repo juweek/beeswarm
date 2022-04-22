@@ -30,8 +30,8 @@ let Scales = {
 
 // Data structure describing volume of displayed data
 let Count = {
-  total: "Share with Medical Debt in Collections",
-  perCap: "% 6+ Chronic condition prevalence"
+  total: "total",
+  perCap: "perCapita"
 };
 
 // Data structure describing legend fields value
@@ -46,7 +46,6 @@ let chartState = {};
 chartState.measure = Count.total;
 chartState.scale = Scales.lin;
 chartState.legend = Legend.total;
-
 
 // Colors used for circles depending on continent
 let colors = d3.scaleOrdinal()
@@ -77,17 +76,13 @@ let xLine = svg.append("line")
     .attr("stroke", "rgb(96,125,139)")
     .attr("stroke-dasharray", "1,2");
 
-// Create tooltip div and make it invisible
-let tooltip = d3.select("#svganchor").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
 
 // Load and process data
-d3.csv("updatedCounties.csv").then(function (data) {
+d3.csv("https://martinheinz.github.io/charts/data/who_suicide_stats.csv").then(function (data) {
 
     let dataSet = data;
 
-    console.log(dataSet)
+    //console.log(dataSet)
 
     // Set chart domain max value to the highest total value in data set
     xScale.domain(d3.extent(data, function (d) {
@@ -96,27 +91,6 @@ d3.csv("updatedCounties.csv").then(function (data) {
 
     redraw();
 
-    // Listen to click on "total" and "per capita" buttons and trigger redraw when they are clicked
-    d3.selectAll(".measure").on("click", function() {
-        let thisClicked = this.value;
-        chartState.measure = thisClicked;
-        if (thisClicked === Count.total) {
-            chartState.legend = Legend.total;
-        }
-        if (thisClicked === Count.perCap) {
-            chartState.legend = Legend.perCap;
-        }
-        redraw();
-    });
-
-    // Listen to click on "scale" buttons and trigger redraw when they are clicked
-    d3.selectAll(".scale").on("click", function() {
-        chartState.scale = this.value;
-        redraw(chartState.measure);
-    });
-
-    // Trigger filter function whenever checkbox is ticked/unticked
-    d3.selectAll("input").on("change", filter);
 
     function redraw() {
 
@@ -169,7 +143,7 @@ d3.csv("updatedCounties.csv").then(function (data) {
 
         // Create country circles
         let countriesCircles = svg.selectAll(".countries")
-            .data(dataSet, function(d) { return d.State });
+            .data(dataSet, function(d) { return d.FIPS });
 
         countriesCircles.exit()
             .transition()
@@ -184,33 +158,13 @@ d3.csv("updatedCounties.csv").then(function (data) {
             .attr("cx", 0)
             .attr("cy", (height / 2) - margin.bottom / 2)
             .attr("r", 6)
-            .attr("fill", function(d){ return d.Color})
+           // .attr("fill", function(d){return colors(d.Color)})
+            .attr("fill", function(d){return d.Color})
             .merge(countriesCircles)
             .transition()
             .duration(2000)
             .attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
-
-        // Show tooltip when hovering over circle (data for respective country)
-        d3.selectAll(".countries").on("mousemove", function(d) {
-            tooltip.html(`Country: <strong>${d.country}</strong><br>
-                          ${chartState.legend.slice(0, chartState.legend.indexOf(","))}: 
-                          <strong>${d3.format(",")(d[chartState.measure])}</strong>
-                          ${chartState.legend.slice(chartState.legend.lastIndexOf(" "))}`)
-                .style('top', d3.event.pageY - 12 + 'px')
-                .style('left', d3.event.pageX + 25 + 'px')
-                .style("opacity", 0.9);
-
-            xLine.attr("x1", d3.select(this).attr("cx"))
-                .attr("y1", d3.select(this).attr("cy"))
-                .attr("y2", (height - margin.bottom))
-                .attr("x2",  d3.select(this).attr("cx"))
-                .attr("opacity", 1);
-
-        }).on("mouseout", function(_) {
-            tooltip.style("opacity", 0);
-            xLine.attr("opacity", 0);
-        });
 
     }
 
