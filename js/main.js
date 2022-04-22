@@ -133,7 +133,7 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/testCounties.csv"
                 return xScale(+d[chartState.measure]);  // This is the desired position
             }).strength(2))  // Increase velocity
             .force("y", d3.forceY((height / 2) - margin.bottom / 2))  // // Apply positioning force to push nodes towards center along Y axis
-            .force("collide", d3.forceCollide(9)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
+            .force("collide", d3.forceCollide(3)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
             .stop();  // Stop simulation from starting automatically
 
         // Manually run simulation
@@ -157,7 +157,7 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/testCounties.csv"
             .attr("class", "countries")
             .attr("cx", 0)
             .attr("cy", (height / 2) - margin.bottom / 2)
-            .attr("r", 4)
+            .attr("r", 2.5)
            // .attr("fill", function(d){return colors(d.Color)})
             .attr("fill", function(d){return d.Color})
             .merge(countriesCircles)
