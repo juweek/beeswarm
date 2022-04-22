@@ -1,4 +1,4 @@
-FIPS,County,State,Share with Medical Debt in Collections,Percet uninsured,Percent in poverty,% 6+ Chronic condition prevalence,"%Live births with low birthweight (< 2,500 grams)",Percent aged 65 or older,Medicare Spending pc,Average income
+Color,FIPS,County,State,total,perCapita,Percent in poverty,Average income,"%Live births with low birthweight (< 2,500 grams)",Percent aged 65 or older,Medicare Spending pc,Average income
 #455A64,13301,Warren County,Georgia,50.5,13.0,26.8,20.3,14.2,21.6,"10,909","53,077"
 #dcdcdc,37079,Greene County,North Carolina,46.0,16.6,22.9,17.3,10.9,15.8,"9,987","53,007"
 #dcdcdc,37107,Lenoir County,North Carolina,44.7,12.5,23.2,20.3,10.9,19.5,"10,254","56,708"
