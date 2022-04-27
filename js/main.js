@@ -28,15 +28,13 @@ let margin = ({top: 0, right: 40, bottom: 34, left: 40});
 let Count = {
   total: "total",
   perCap: "perCapita",
-  population: "Average income"
+  population: "population"
 };
-
 
 let chartState = {};
 
 chartState.measure = Count.total;
 chartState.scale = "scaleLinear";
-
 
 // Colors used for circles depending on continent
 let colors = d3.scaleOrdinal()
@@ -162,9 +160,10 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
             .attr("cx", 0)
             .attr("cy", (height / 2) - margin.bottom / 2)
             //.attr("r", 4)
-            .attr("r", (function(d){ return (parseInt(d.population))}))
+            .attr("r", function(d){return (d.population)/300000})
            // .attr("fill", function(d){return colors(d.Color)})
             .attr("fill", function(d){return d.Color})
+            .attr("stroke", "#333333")
             .merge(countriesCircles)
             .transition()
             .duration(2000)
