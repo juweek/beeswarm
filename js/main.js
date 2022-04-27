@@ -33,27 +33,16 @@ let Count = {
 
 // Data structure describing legend fields value
 let Legend = {
-    total: "% with medical debt",
+    total: "% with medical debt ",
     perCap: "Per Capita Deaths"
 };
 
 let chartState = {};
 
 chartState.measure = Count.total;
+chartState.radius = 0
 chartState.scale = "scaleLinear";
 chartState.legend = Legend.total;
-
-// Colors used for circles depending on continent
-let colors = d3.scaleOrdinal()
-    .domain(["asia", "africa", "northAmerica", "europe", "southAmerica", "oceania"])
-    .range(['#D81B60','#1976D2','#388E3C','#FBC02D','#E64A19','#455A64']);
-
-d3.select("#asiaColor").style("color", colors("asia"));
-d3.select("#africaColor").style("color", colors("africa"));
-d3.select("#northAmericaColor").style("color", colors("northAmerica"));
-d3.select("#southAmericaColor").style("color", colors("southAmerica"));
-d3.select("#europeColor").style("color", colors("europe"));
-d3.select("#oceaniaColor").style("color", colors("oceania"));
 
 /*
 ------------------------------
@@ -102,9 +91,23 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
         return +d.total;
     }));
 
-    redraw();
+     // Listen to click on "total" and "per capita" buttons and trigger redraw when they are clicked
+     d3.selectAll(".measure").on("click", function() {
+        let thisClicked = this.value;
+        //chartState.measure = thisClicked;
+        if (thisClicked == "nonSize") {
+            chartState.radius = 5
+        } else {
+            chartState.radius = 0
+        }
+        redraw()
+    })
+
+    redraw()
 
     function redraw() {
+
+        svg.selectAll(".countries").remove()
 
         //set the scale based off the range from the dataset
         xScale = d3.scaleLinear().range([ margin.left, width - margin.right ])
@@ -141,7 +144,7 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
                 return xScale(+d[chartState.measure]);  // This is the desired position
             }).strength(2))  // Increase velocity
             .force("y", d3.forceY((height / 2) - margin.bottom / 2))  // // Apply positioning force to push nodes towards center along Y axis
-            .force("collide", d3.forceCollide(9)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
+            .force("collide", d3.forceCollide(14)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
             .stop();  // Stop simulation from starting automatically
 
         // Manually run simulation
@@ -167,8 +170,10 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
             .attr("cx", 0)
             .attr("cy", (height / 2) - margin.bottom / 2)
             //.attr("r", 4)
-            .attr("r", function(d){return (d.population)/300000})
-           // .attr("fill", function(d){return colors(d.Color)})
+            .attr("r", function(d){
+                if (chartState.radius == 5) {return 5}
+                else 	{ return (d.population)/300000}
+            })
             .attr("fill", function(d){return d.Color})
             .attr("stroke", "#333333")
             .merge(countriesCircles)
@@ -179,10 +184,10 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
 
                // Show tooltip when hovering over circle (data for respective country)
         d3.selectAll(".countries").on("mousemove", function(d) {
-            console.log(d)
-            tooltip.html(`County: <strong>${d.target.__data__.County}</strong><br>
-                          ${chartState.legend.slice(0, chartState.legend.indexOf(","))}: 
-                          <strong>${d.target.__data__.perCapita}%</strong>`)
+            tooltip.html(`<strong>${d.target.__data__.County}, ${d.target.__data__.State}</strong><br>
+                          <strong>${chartState.legend.slice(0, chartState.legend.indexOf(","))}</strong>: 
+                          ${d.target.__data__.total}%<br>
+                          <strong>Population: </strong>${d.target.__data__.population}`)
                 .style('top', (d.pageY - 12) + 'px')
                 .style('left', (d.pageX + 25) + 'px')
                 .style("opacity", 0.9);
