@@ -31,10 +31,17 @@ let Count = {
   population: "population"
 };
 
+// Data structure describing legend fields value
+let Legend = {
+    total: "% with medical debt",
+    perCap: "Per Capita Deaths"
+};
+
 let chartState = {};
 
 chartState.measure = Count.total;
 chartState.scale = "scaleLinear";
+chartState.legend = Legend.total;
 
 // Colors used for circles depending on continent
 let colors = d3.scaleOrdinal()
@@ -134,7 +141,7 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
                 return xScale(+d[chartState.measure]);  // This is the desired position
             }).strength(2))  // Increase velocity
             .force("y", d3.forceY((height / 2) - margin.bottom / 2))  // // Apply positioning force to push nodes towards center along Y axis
-            .force("collide", d3.forceCollide(3)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
+            .force("collide", d3.forceCollide(9)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
             .stop();  // Stop simulation from starting automatically
 
         // Manually run simulation
@@ -172,13 +179,13 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
 
                // Show tooltip when hovering over circle (data for respective country)
         d3.selectAll(".countries").on("mousemove", function(d) {
-            tooltip.html(`Country: <strong>${d.country}</strong><br>
+            console.log(d)
+            tooltip.html(`County: <strong>${d.target.__data__.County}</strong><br>
                           ${chartState.legend.slice(0, chartState.legend.indexOf(","))}: 
-                          <strong>${d3.format(",")(d[chartState.measure])}</strong>
-                          ${chartState.legend.slice(chartState.legend.lastIndexOf(" "))}`)
-                .style('top', d3.event.pageY - 12 + 'px')
-                .style('left', d3.event.pageX + 25 + 'px')
-                .style("opacity", 0.9``);
+                          <strong>${d.target.__data__.perCapita}%</strong>`)
+                .style('top', (d.pageY - 12) + 'px')
+                .style('left', (d.pageX + 25) + 'px')
+                .style("opacity", 0.9);
 
             xLine.attr("x1", d3.select(this).attr("cx"))
                 .attr("y1", d3.select(this).attr("cy"))
