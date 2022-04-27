@@ -1,4 +1,4 @@
-Color,FIPS,County,State,total,perCapita,Percent in poverty,Average income,"%Live births with low birthweight (< 2,500 grams)",Percent aged 65 or older
+Color,FIPS,County,State,total,perCapita,Percent in poverty,population,"%Live births with low birthweight (< 2,500 grams)",Percent aged 65 or older
 #D81B60,48439,Tarrant County,Texas,27.3,20.3,16.1,2110640
 #D81B60,48113,Dallas County,Texas,22.5,20.5,21.0,2613539
 #D81B60,48029,Bexar County,Texas,20.9,18.2,15.2,2009324
