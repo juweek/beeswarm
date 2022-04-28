@@ -1,21 +1,5 @@
 /*
 ------------------------------
-METHOD: fetch the elements from the DOM
-------------------------------
-
-var svgElement = document.getElementById("uit-canvas__map-svg")
-var textElement = document.getElementById("text_container")
-var dropdownElement = document.getElementById("mySelect")
-let svgPaths = svgElement.getElementsByTagName("path")
-var buttonElements = document.querySelectorAll(".buttonsContainer button");
-var keyText = document.querySelectorAll(".key_block span");
-
-var arr = Array.from(svgPaths)
-*/
-
-
-/*
-------------------------------
 METHOD: set the size of the canvas
 ------------------------------
 */
@@ -204,44 +188,7 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv
         });
 
     }
-
-
-    // Filter data based on which checkboxes are ticked
-    function filter() {
-
-        function getCheckedBoxes(checkboxName) {
-
-            let checkboxes = d3.selectAll(checkboxName).nodes();
-            let checkboxesChecked = [];
-            for (let i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                    checkboxesChecked.push(checkboxes[i].defaultValue);
-                }
-            }
-            return checkboxesChecked.length > 0 ? checkboxesChecked : null;
-        }
-
-        let checkedBoxes = getCheckedBoxes(".continent");
-
-        let newData = [];
-
-        if (checkedBoxes == null) {
-            dataSet = newData;
-            redraw();
-            return;
-        }
-
-        for (let i = 0; i < checkedBoxes.length; i++){
-            let newArray = data.filter(function(d) {
-                return d.continent === checkedBoxes[i];
-            });
-            Array.prototype.push.apply(newData, newArray);
-        }
-
-        dataSet = newData;
-        redraw();
-    }
-
+    
 }).catch(function (error) {
     if (error) throw error;
 });

@@ -22,18 +22,7 @@ body {
   margin: 0 auto;
 }
 
-#checkboxes > * {
-  font-size: 14px;
-  display: inline;
-  padding-top: 3px;
-}
-
 .measure-group {
-  display:inline;
-}
-
-.scale-group {
-  padding-left: 40px;
   display:inline;
 }
 
@@ -44,11 +33,6 @@ button {
 
 svg {
   background-color: white;
-}
-
-.cells path {
-  fill: none;
-  pointer-events: all;
 }
 
 div.tooltip {
@@ -74,26 +58,6 @@ div.tooltip {
 
 .axis text {
   font: 10px sans-serif;
-}
-
-.legend {
-  fill: rgba(0,0,0,.87);
-}
-
-.article {
-  position: fixed;
-  top: 20px;
-  left: 15px;
-  font-size: 35px;
-  color: rgb(96,125,139);
-}
-
-.article-tt {
-  font-size: 14px;
-  background: rgb(96,125,139);
-  border: 1px solid rgb(96,125,139);
-  border-radius: 2px;
-  pointer-events: none;
 }
 
 /*
