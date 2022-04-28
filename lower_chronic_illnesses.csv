@@ -1,4 +1,4 @@
-FIPS,County,State,Share with Medical Debt in Collections,Percet uninsured,Percent in poverty,% 6+ Chronic condition prevalence,"%Live births with low birthweight (< 2,500 grams)",Percent aged 65 or older,Medicare Spending pc,Average income
+FIPS,County,State,percent_medicalDebt,percent_uninsured,percent_poverty,percent_chronic,percent_live_births,percent_65,medicare_spending,average_income
 8091,Ouray County,Colorado,8.5,10.0,7.2,2.5,11.9,27.7,"6,232","89,953"
 8117,Summit County,Colorado,14.6,16.6,8.0,3.6,12.9,12.8,"6,147","101,084"
 8113,San Miguel County,Colorado,5.4,8.7,11.3,3.8,8.8,13.5,"5,559","103,024"

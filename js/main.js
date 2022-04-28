@@ -66,7 +66,7 @@ let tooltip = d3.select("#svganchor").append("div")
 METHOD: load in and process data
 ------------------------------
 */
-d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv").then(function (data) {
+d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/lower_chronic_illnesses.csv").then(function (data) {
 
     let dataSet = data;
 
