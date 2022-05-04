@@ -3,7 +3,7 @@
 METHOD: set the size of the canvas
 ------------------------------
 */
-let height = 300;
+let height = 500;
 let width = 1000;
 let margin = ({top: 0, right: 40, bottom: 34, left: 40});
 
@@ -39,11 +39,6 @@ let svg = d3.select("#svganchor")
     .attr("width", width)
     .attr("height", height);
 
-let svgLowest = d3.select("#svgLowest")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
 /*
 ------------------------------
 METHOD: add in the x-axis
@@ -66,26 +61,6 @@ let tooltip = d3.select("#svganchor").append("div")
 .attr("class", "tooltip")
 .style("opacity", 0);
 
-
-/*
-------------------------------
-METHOD: add in the x-axis for the lowest one
-------------------------------
-*/
-
-svgLowest.append("g")
-    .attr("class", "x axis lowest")
-    .attr("transform", "translate(0," + (height - margin.bottom) + ")");
-
-// Create line that connects circle and X axis
-let xLineLowest = svgLowest.append("line")
-    .attr("stroke", "rgb(96,125,139)")
-    .attr("stroke-dasharray", "1,2");
-
-// Create tooltip div and make it invisible
-let tooltipLowest = d3.select("#svganchor").append("div")
-.attr("class", "tooltip")
-.style("opacity", 0);
 
 
 /*
@@ -186,7 +161,9 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top_chronic_illne
                 else 	{ return (d.population)/300000}
             })
             */
-            .attr("fill", function(d){return d.Color})
+            .attr("fill", function(d){
+                console.log(d.percent_chronic)
+                return d.Color})
             .attr("stroke", "#333333")
             .merge(countriesCircles)
             .transition()
@@ -198,8 +175,8 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top_chronic_illne
         d3.selectAll(".countries").on("mousemove", function(d) {
             tooltip.html(`<strong>${d.target.__data__.County}, ${d.target.__data__.State}</strong><br>
                           <strong>${chartState.legend.slice(0, chartState.legend.indexOf(","))}</strong>: 
-                          ${d.target.__data__.total}%<br>
-                          <strong>Population: </strong>${d.target.__data__.population}`)
+                          ${d.target.__data__.percent_medicalDebt}%<br>
+                          <strong>% with 6+ chronic: </strong>${d.target.__data__.percent_chronic}`)
                 .style('top', (d.pageY - 12) + 'px')
                 .style('left', (d.pageX + 25) + 'px')
                 .style("opacity", 0.9);
@@ -214,140 +191,6 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top_chronic_illne
             tooltip.style("opacity", 0);
             xLine.attr("opacity", 0);
         });
-
-    }
-    
-}).catch(function (error) {
-    if (error) throw error;
-});
-
-/*
-------------------------------
-METHOD: load in and process data
-------------------------------
-*/
-d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/lower_chronic_illnesses.csv").then(function (data) {
-
-    let dataSet = data;
-
-    // Set chart domain max value to the highest total value in data set. this will affect the key
-    xScale.domain(d3.extent(data, function (d) {
-        return +d.total;
-    }));
-
-     // Listen to click on "total" and "per capita" buttons and trigger redraw when they are clicked
-     d3.selectAll(".measure").on("click", function() {
-        let thisClicked = this.value;
-        //chartState.measure = thisClicked;
-        if (thisClicked == "nonSize") {
-            chartState.radius = 5
-        } else {
-            chartState.radius = 0
-        }
-        redraw()
-    })
-
-    redraw()
-
-    function redraw() {
-
-        svgLowest.selectAll(".countries").remove()
-
-        //set the scale based off the range from the dataset
-        xScale = d3.scaleLinear().range([ margin.left, width - margin.right ])
-       
-        xScale.domain(d3.extent(dataSet, function(d) {
-            return +d[chartState.measure];
-        }));
-
-        // Set X axis based on new scale. If chart is set to "per capita" use numbers with one decimal point
-        let xAxis;
-        if (chartState.measure === Count.perCap) {
-            xAxis = d3.axisBottom(xScale)
-                .ticks(7, ".1f")
-                .tickSizeOuter(0);
-        }
-        else {
-            xAxis = d3.axisBottom(xScale)
-                .ticks(7, ".1s")
-                .tickSizeOuter(0);
-        }
-
-        //include a transition for the x axis if you change the scale
-        d3.transition(svgLowest).select(".x.axis.lowest")
-            .transition()
-            .duration(1000)
-            .call(xAxis);
-
-
-        // Create simulation with specified dataset
-        let simulation = d3.forceSimulation(dataSet)
-            // Apply positioning force to push nodes towards desired position along X axis
-            .force("x", d3.forceX(function(d) {
-                // Mapping of values from total/perCapita column of dataset to range of SVG chart (<margin.left, margin.right>)
-                return xScale(+d[chartState.measure]);  // This is the desired position
-            }).strength(2))  // Increase velocity
-            .force("y", d3.forceY((height / 2) - margin.bottom / 2))  // // Apply positioning force to push nodes towards center along Y axis
-            .force("collide", d3.forceCollide(5)) // Apply collision force with radius of 9 - keeps nodes centers 9 pixels apart
-            .stop();  // Stop simulation from starting automatically
-
-        // Manually run simulation
-        for (let i = 0; i < dataSet.length; ++i) {
-            simulation.tick(10);
-        }
-
-        // Create country circles
-        let countriesCircles = svgLowest.selectAll(".countries")
-            .data(dataSet, function(d) { return d.FIPS });
-
-        countriesCircles.exit()
-            .transition()
-            .duration(1000)
-            .attr("cx", 0)
-            .attr("cy", (height / 2) - margin.bottom / 2)
-            .remove();
-
-        //for every FIPS in the dataset, create a circle, set the r, and set the circles
-        countriesCircles.enter()
-            .append("circle")
-            .attr("class", "countries")
-            .attr("cx", 0)
-            .attr("cy", (height / 2) - margin.bottom / 2)
-            .attr("r", 3)
-            /*.attr("r", function(d){
-                if (chartState.radius == 5) {return 5}
-                else 	{ return (d.population)/300000}
-            })
-            */
-            .attr("fill", function(d){return d.Color})
-            .attr("stroke", "#333333")
-            .merge(countriesCircles)
-            .transition()
-            .duration(2000)
-            .attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
-
-               // Show tooltip when hovering over circle (data for respective country)
-        d3.selectAll(".countries").on("mousemove", function(d) {
-            tooltipLowest.html(`<strong>${d.target.__data__.County}, ${d.target.__data__.State}</strong><br>
-                          <strong>${chartState.legend.slice(0, chartState.legend.indexOf(","))}</strong>: 
-                          ${d.target.__data__.total}%<br>
-                          <strong>Population: </strong>${d.target.__data__.population}`)
-                .style('top', (d.pageY - 12) + 'px')
-                .style('left', (d.pageX + 25) + 'px')
-                .style("opacity", 0.9);
-
-            xLineLowest.attr("x1", d3.select(this).attr("cx"))
-                .attr("y1", d3.select(this).attr("cy"))
-                .attr("y2", (height - margin.bottom))
-                .attr("x2",  d3.select(this).attr("cx"))
-                .attr("opacity", 1);
-
-        }).on("mouseout", function(_) {
-            tooltipLowest.style("opacity", 0);
-            xLineLowest.attr("opacity", 0);
-        });
-
     }
     
 }).catch(function (error) {
