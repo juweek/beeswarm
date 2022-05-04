@@ -10,8 +10,8 @@ let margin = ({top: 0, right: 40, bottom: 34, left: 40});
 
 // Data structure describing volume of displayed data
 let Count = {
-  total: "total",
-  perCap: "perCapita",
+  total: "medical_debt_collections_pct",
+  perCap: "collection_debt_state_avg",
   population: "population"
 };
 
@@ -66,7 +66,7 @@ let tooltip = d3.select("#svganchor").append("div")
 METHOD: load in and process data
 ------------------------------
 */
-d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top20Counties.csv").then(function (data) {
+d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_NPR/datasets/top20Counties.csv").then(function (data) {
 
     let dataSet = data;
 
