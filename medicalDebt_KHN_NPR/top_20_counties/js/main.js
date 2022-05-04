@@ -11,7 +11,7 @@ let margin = ({top: 0, right: 40, bottom: 34, left: 40});
 // Data structure describing volume of displayed data
 let Count = {
   total: "medical_debt_collections_pct",
-  perCap: "collection_debt_state_avg",
+  perCap: "six_chronic_pct",
   population: "population"
 };
 
@@ -155,8 +155,10 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_N
             .attr("cy", (height / 2) - margin.bottom / 2)
             //.attr("r", 4)
             .attr("r", function(d){
+                let bro = parseInt(d.collection_debt_state_avg)
+                console.log(bro)
                 if (chartState.radius == 5) {return 5}
-                else 	{ return (d.population)/300000}
+                else 	{ return (bro)/90}
             })
             .attr("fill", function(d){return d.Color})
             .attr("stroke", "#333333")
