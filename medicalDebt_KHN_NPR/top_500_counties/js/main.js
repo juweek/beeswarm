@@ -68,7 +68,7 @@ let tooltip = d3.select("#svganchor").append("div")
 METHOD: load in and process data
 ------------------------------
 */
-d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top_chronic_illnesses.csv").then(function (data) {
+d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_NPR/datasets/top_chronic_illnesses.csv").then(function (data) {
 
     let dataSet = data;
 
@@ -162,8 +162,15 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/top_chronic_illne
             })
             */
             .attr("fill", function(d){
-                console.log(d.percent_chronic)
-                return d.Color})
+                if (d.percent_chronic > 30) {
+                    return '#CC1A29'
+                  } else if(d.percent_chronic > 20) {
+                    return '#F98C6D'
+                  } else if(d.percent_chronic > 10) {
+                    return '#E6E0C4'
+                 }  else {
+                    return '#4DA083'
+                }})
             .attr("stroke", "#333333")
             .merge(countriesCircles)
             .transition()
