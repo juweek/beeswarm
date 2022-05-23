@@ -162,16 +162,16 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_N
             })
             */
             .attr("fill", function(d){
-                if (d.percent_chronic > 30) {
+                if (d.percent_medicalDebt > 30) {
                     return '#CC1A29'
-                  } else if(d.percent_chronic > 20) {
+                  } else if(d.percent_medicalDebt > 20) {
                     return '#F98C6D'
-                  } else if(d.percent_chronic > 10) {
+                  } else if(d.percent_medicalDebt > 10) {
                     return '#E6E0C4'
                  }  else {
                     return '#4DA083'
                 }})
-            .attr("stroke", "#333333")
+            .attr("stroke", "#dfdfdf")
             .merge(countriesCircles)
             .transition()
             .duration(2000)

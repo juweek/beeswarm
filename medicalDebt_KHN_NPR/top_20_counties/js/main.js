@@ -27,6 +27,7 @@ chartState.measure = Count.total;
 chartState.radius = 0
 chartState.scale = "scaleLinear";
 chartState.legend = Legend.total;
+chartState.radiusSize = Count.total
 
 /*
 ------------------------------
@@ -100,6 +101,9 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_N
             return +d[chartState.measure];
         }));
 
+        var rscale = d3.scaleLinear().domain(d3.extent(dataSet, function(d) {
+            return +d[chartState.radiusSize];
+        })).range([3, 9]) 
         // Set X axis based on new scale. If chart is set to "per capita" use numbers with one decimal point
         let xAxis;
         if (chartState.measure === Count.perCap) {
@@ -153,14 +157,18 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_N
             .attr("class", "countries")
             .attr("cx", 0)
             .attr("cy", (height / 2) - margin.bottom / 2)
-            //.attr("r", 4)
+            /*.attr("r", function(d){
+                if (chartState.radius == 5) {return 8}
+                else 	{ 
+                    console.log(rscale(parseInt(d.collection_debt_state_avg)))
+                    return rscale(parseInt(d.collection_debt_state_avg))}
+            })*/
             .attr("r", function(d){
-                let bro = parseInt(d.collection_debt_state_avg)
-                console.log(bro)
-                if (chartState.radius == 5) {return 5}
-                else 	{ return (bro)/90}
+                if (chartState.radius == 5) {return 8}
+                else 	{ return parseInt(d.collection_debt_state_avg)/80}
             })
-            .attr("fill", function(d){return d.Color})
+            
+            .attr("fill", function(d){return '#D21A55'})
             .attr("stroke", "#333333")
             .merge(countriesCircles)
             .transition()
@@ -172,8 +180,8 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/medicalDebt_KHN_N
         d3.selectAll(".countries").on("mousemove", function(d) {
             tooltip.html(`<strong>${d.target.__data__.County}, ${d.target.__data__.State}</strong><br>
                           <strong>${chartState.legend.slice(0, chartState.legend.indexOf(","))}</strong>: 
-                          ${d.target.__data__.total}%<br>
-                          <strong>Population: </strong>${d.target.__data__.population}`)
+                          ${d.target.__data__.medical_debt_collections_pct}%<br>
+                          <strong>Avg amount of debt: </strong>${d.target.__data__.collection_debt_state_avg}`)
                 .style('top', (d.pageY - 12) + 'px')
                 .style('left', (d.pageX + 25) + 'px')
                 .style("opacity", 0.9);
