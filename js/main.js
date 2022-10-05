@@ -155,10 +155,8 @@ d3.csv("https://raw.githubusercontent.com/juweek/beeswarm/main/lower_chronic_ill
             .attr("cy", (height / 2) - margin.bottom / 2)
             //.attr("r", 4)
             .attr("r", function(d){
-                console.log(d)
-                return 5
-                //if (chartState.radius == 5) {return 5}
-                //else 	{ return (d.population)/300000}
+                if (chartState.radius == 5) {return 5}
+                else 	{ return (d.population)/300000}
             })
             .attr("fill", function(d){return d.Color})
             .attr("stroke", "#333333")
