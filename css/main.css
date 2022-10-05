@@ -194,59 +194,24 @@ path {
   color: white;
 }
 
-.sequenceRate .noData{
-  fill:   #c4c4c4;
-}
-.sequenceRate .over10{
-  fill:   #38AB8E;
-}
-
-.sequenceRate .over5{
-  fill:   #CCCB6C;
-}
-
-.sequenceRate .over1{
-  fill:   #F2CF6F;
-}
-
-.sequenceRate .under1{
-  fill:   #FD7061;
+div.tooltip {
+  position: absolute;
+  text-align: left;
+  color: #333;
+  white-space: normal;
+  padding: 6px;
+  font-size: 12px;
+  background: white;
+  border: 1px solid rgb(96,125,139);
+  border-radius: 2px;
+  pointer-events: none;
+  cursor: none;
+  width: 180px;
 }
 
-.covidCases .noData{
-  fill:   #c4c4c4;
-}
-.covidCases .over10{
-  fill:   #ab0613;
-}
-
-.covidCases .over5{
-  fill:   #c70000;
-}
-
-.covidCases .over1{
-  fill:   #ff4e36;
-}
-
-.covidCases .under1{
-  fill:   #ffbac8;
-}
-
-.genomeNumbers .noData{
-  fill:   #c4c4c4;
-}
-.genomeNumbers .over10{
-  fill:   #005689;
-}
-
-.genomeNumbers .over5{
-  fill:   #0084c6;
-}
-
-.genomeNumbers .over1{
-  fill:   #00b2ff;
-}
-
-.genomeNumbers .under1{
-  fill:   #90dcff;
+.axis line,
+.axis path {
+  fill: none;
+  stroke: rgb(96,125,139);
+  shape-rendering: crispEdges;
 }
